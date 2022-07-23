@@ -183,15 +183,15 @@ func main() {
 		Symbol: cpuAsset.Symbol,
 	}
 	for i, chunk := range chunks {
-		retry:
-		fmt.Println("Processing chunk #", i)
-		actions := make([]*eos.Action, 0)
 		firstAcc := chunk[0]
+		fmt.Println("Processing chunk #", i)
 		wasFirstAcc, err := api.GetAccount(context.Background(), eos.AN(firstAcc))
 		if err != nil {
 			fmt.Println(fmt.Errorf("getting account %s: %w", firstAcc, err))
 			os.Exit(1)
 		}
+	retry:
+		actions := make([]*eos.Action, 0)
 		for _, account := range chunk {
 			actions = append(actions, FullActionDelegateBW(eos.AN(config.Config.Account), eos.AN(account), cpuAsset, netAsset))
 		}
